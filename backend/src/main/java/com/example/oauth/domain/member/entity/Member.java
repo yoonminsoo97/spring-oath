@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,7 +25,13 @@ public class Member extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
+    private Long socialId;
+
+    @Column(nullable = false)
     private String nickname;
+
+    @Column(nullable = false)
+    private String profileImage;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -34,14 +41,22 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private Role role;
 
-    public Member(String nickname, Provider provider) {
+    @Builder
+    public Member(Long socialId, String nickname, String profileImage, Provider provider) {
+        this.socialId = socialId;
         this.nickname = nickname;
+        this.profileImage = profileImage;
         this.provider = provider;
         this.role = Role.MEMBER;
     }
 
     public String getAuthority() {
         return this.role.authority();
+    }
+
+    public void update(String nickname, String profileImage) {
+        this.nickname = nickname;
+        this.profileImage = profileImage;
     }
 
 }
